@@ -12,6 +12,7 @@ const queue = new Map();
 var thing = new Map();
 var started = new Map();
 var seconds = 0;
+var musicon = true;
 var tokenn = ("");
 var slapsy = ["./tenorslap.gif","./tenorslap2.gif","./tenorslap3.gif","./tenorslap4.gif","./tenorslap5.gif","./tenorslap6.gif"];
 var hugsy = ["./tenorhug.gif","./tenorhug2.gif","./tenorhug3.gif","./tenorhug4.gif","./tenorhug5.gif","./tenorhug6.gif"];
@@ -57,18 +58,17 @@ client.on("message", async message => {
     if (!message.content.startsWith('sh')) return;
   
     const serverQueue = queue.get(message.guild.id);
-  
-    if (message.content.startsWith(`sh play`)) {
+    if (message.content.startsWith(`sh play`) && musicon) {
       execute(message, serverQueue);
       return;
-    } else if (message.content.startsWith(`sh skip`)) {
+    } else if (message.content.startsWith(`sh skip`) && musicon) {
       skip(message, serverQueue);
       return;
-    } else if (message.content.startsWith('sh queue')){
+    } else if (message.content.startsWith(`sh queue`) && musicon){
       queuee(message,serverQueue);
       return;
     }
-     else if (message.content.startsWith('sh leave')){
+     else if (message.content.startsWith(`sh leave`) && musicon){
      leave(message, serverQueue);
     return;
   }
@@ -167,7 +167,7 @@ client.on("message", async message => {
     serverQueue.songs = [];
     serverQueue.connection.dispatcher.end();
   }
-  
+
   function play(guild, song) {
     const serverQueue = queue.get(guild.id);
     if (!song) {
@@ -284,6 +284,9 @@ const helpembed = new Discord.MessageEmbed()
 )
 .setFooter('Created by Pouek_#5280')
 message.channel.send(helpembed);
+if (message.content.startsWith(`sh play`) && !musicon) {
+  message.channel.send("Music is not available now :( Try again later")
+      }
 };
 if(message.content == "sh ping"){
     const pingembed = new Discord.MessageEmbed()
