@@ -14,6 +14,7 @@ var started = new Map();
 var seconds = 0;
 var musicon = true;
 var tokenn = ("");
+var answers = ["yes","no","...","I don't know","why?","definitely yes!","NO","try again","Why not?","Definitely not!","Maybe not?","I can't say no :3","Yep!"];
 var slapsy = ["./tenorslap.gif","./tenorslap2.gif","./tenorslap3.gif","./tenorslap4.gif","./tenorslap5.gif","./tenorslap6.gif"];
 var hugsy = ["./tenorhug.gif","./tenorhug2.gif","./tenorhug3.gif","./tenorhug4.gif","./tenorhug5.gif","./tenorhug6.gif"];
 var patsy = ["./tenorpat.gif","./tenorpat2.gif","./tenorpat3.gif","./tenorpat4.gif","./tenorpat5.gif","./tenorpat6.gif"];
@@ -191,6 +192,7 @@ client.on("message", async message => {
     //serverQueue.textChannel.send(`Start playing: **${song.title}**`);
   }
 client.on("message", async (message) => {
+  if (!message.author.bot){
     if(message.content == "sh dog"){
         fetch("https://dog.ceo/api/breeds/image/random")
         .then(res => res.json()).then(body => {
@@ -266,8 +268,10 @@ client.on("message", async (message) => {
         }
     })
 }
+  }
 })
 client.on("message", (message) => {
+  if (!message.author.bot){
 if(message.content == "sh help"){ // Check if content of message is "!ping"
 const helpembed = new Discord.MessageEmbed()
     .setColor('#FFDF00')
@@ -279,7 +283,7 @@ const helpembed = new Discord.MessageEmbed()
     {name: ':tools: Moderation',value:'kick ban clean warn'},
     {name: ':smile: Fun',value:'slap ouch hug pat kiss neko cat dog fox meme'},
     {name: ':notes: Music (need a youtube link)',value:'play skip leave queue'},
-    {name:':video_game:  Games',value:'*Coming Soon*'},
+    {name:':video_game:  Games',value:'8ball'},
     {name:':potable_water: Utility',value:'say avatar'},
 )
 .setFooter('Created by Pouek_#5280')
@@ -306,7 +310,7 @@ if(message.content == "sh bot"){
         { name: 'Ping',value: Math.round(client.ws.ping) + ' ms'},
         {name: 'Uptime',value:seconds+' seconds'},
         {name: 'Develop time version 1.0',value:'14 hours'},
-        {name: 'Bot version',value:'v1.4'},
+        {name: 'Bot version',value:'v1.4.5'},
     )
 	message.channel.send(botembed);
 };
@@ -344,6 +348,27 @@ if(message.content.startsWith("sh hug")){
         .setDescription("You didn't mention anyone!");
         message.channel.send(errorembed);
     }
+};
+if(message.content.startsWith("sh 8ball")){
+  let ball = message.content.split(' ').slice(2).join(' ');
+  if(ball){
+    var answer = answers[Math.floor(Math.random()*answers.length)];
+    const ballem = new Discord.MessageEmbed()
+      .setColor('#FFDF00')
+      .setTitle('**' + answer + '**')
+      .setAuthor('says','https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/twitter/259/pool-8-ball_1f3b1.png')
+      .addFields(
+        { name: ':grey_question: question ',value: ball}
+      );
+      message.channel.send(ballem);
+  }
+  else{
+      const errorembed = new Discord.MessageEmbed()
+      .setColor('#FFDF00')
+      .setTitle('Error')
+      .setDescription("You didn't type the question!");
+      message.channel.send(errorembed);
+  }
 };
 if(message.content.startsWith("sh warn") && message.member.hasPermission("KICK_MEMBERS")){
   let warnn = message.content.split(' ').slice(2,3);
@@ -554,5 +579,6 @@ if(message.content.startsWith("sh ban") && message.member.hasPermission("BAN_MEM
       .catch(error => message.reply(`Sorry ${message.author} I couldn't ban because of : ${error}`));
     message.reply(`${member.user.tag} has been banned by ${message.author.tag} because: ${reason}`);
 };
+  }
 });	
 client.login(tokenn);
