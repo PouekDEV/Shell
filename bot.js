@@ -370,6 +370,39 @@ if(message.content.startsWith("sh 8ball")){
       message.channel.send(errorembed);
   }
 };
+if(message.content.startsWith("sh restart")){
+  if(message.member.id == "504891362081112065"){
+    const re = new Discord.MessageEmbed()
+      .setColor('#FFDF00')
+      .setAuthor('RESTARTING...','https://media.tenor.com/images/20039a1a39b050b8518d4d0bdcd35ba6/tenor.gif')
+      message.channel.send(re);
+      client.destroy();
+      client.login(auth.token);
+      client.user.setActivity("sh help | " + client.guilds.cache.size + " servers", {type: "PLAYING"});
+      const re2 = new Discord.MessageEmbed()
+      .setColor('#FFDF00')
+      .setAuthor('Done','https://cdn.discordapp.com/attachments/705426447657074831/754757172956495872/tenor.gif')
+      message.channel.send(re2);
+      console.log("Pouek restared bot");
+  }
+else if(message.member.id == "640239016523857920"){
+  const re = new Discord.MessageEmbed()
+  .setColor('#FFDF00')
+  .setAuthor('RESTARTING...','https://media.tenor.com/images/20039a1a39b050b8518d4d0bdcd35ba6/tenor.gif')
+  message.channel.send(re);
+  client.destroy();
+  client.login(auth.token);
+  client.user.setActivity("sh help | " + client.guilds.cache.size + " servers", {type: "PLAYING"});
+  const re2 = new Discord.MessageEmbed()
+  .setColor('#FFDF00')
+  .setAuthor('Done','https://cdn.discordapp.com/attachments/705426447657074831/754757172956495872/tenor.gif')
+  message.channel.send(re2);
+  console.log("Natrix restared bot");
+}
+else{
+  message.reply("You can't use that");
+}
+  }
 if(message.content.startsWith("sh warn") && message.member.hasPermission("KICK_MEMBERS")){
   let warnn = message.content.split(' ').slice(2,3);
   let warnnp = message.content.split(' ').slice(3).join(' ');
