@@ -12,9 +12,10 @@ const queue = new Map();
 var thing = new Map();
 var started = new Map();
 var seconds = 0;
-var musicon = true;
+var musicon = false;
 var tokenn = ("");
 var answers = ["yes","no","...","I don't know","why?","definitely yes!","NO","try again","Why not?","Definitely not!","Maybe not?","I can't say no :3","Yep!"];
+var rpsanswers = ["🪨","🧻","✂️"];
 var slapsy = ["./tenorslap.gif","./tenorslap2.gif","./tenorslap3.gif","./tenorslap4.gif","./tenorslap5.gif","./tenorslap6.gif"];
 var hugsy = ["./tenorhug.gif","./tenorhug2.gif","./tenorhug3.gif","./tenorhug4.gif","./tenorhug5.gif","./tenorhug6.gif"];
 var patsy = ["./tenorpat.gif","./tenorpat2.gif","./tenorpat3.gif","./tenorpat4.gif","./tenorpat5.gif","./tenorpat6.gif"];
@@ -281,13 +282,29 @@ const helpembed = new Discord.MessageEmbed()
     { name: ':grey_question: Help',value: 'help'},
     { name: ':bookmark: Info',value:'ping invite support serverstats uptime bot'},
     {name: ':tools: Moderation',value:'kick ban clean warn'},
-    {name: ':smile: Fun',value:'slap ouch hug pat kiss neko cat dog fox meme'},
-    {name: ':notes: Music (need a youtube link)',value:'play skip leave queue'},
-    {name:':video_game:  Games',value:'8ball'},
+    {name: ':smile: Fun',value:'slap ouch hug pat kiss cat dog fox meme sike'},
+    {name: ':notes: Music :warning: MUSIC IS DISABLED :warning:',value:'play skip leave queue'},
+    {name:':video_game:  Games',value:'8ball rps'},
     {name:':potable_water: Utility',value:'say avatar'},
 )
 .setFooter('Created by Pouek_#5280')
 message.channel.send(helpembed);
+}
+if(message.content == "sh helpadmin"){ // Check if content of message is "!ping"
+if(message.member.id == "504891362081112065"){
+const helpambed = new Discord.MessageEmbed()
+    .setColor('#FF0000')
+    .setTitle(':octagonal_sign:  Help For Admins')
+.addFields(
+    { name: ':grey_question: Help',value: 'helpadmin'},
+    { name: ':closed_lock_with_key: admin commands',value:'eval restart'}
+)
+.setFooter('Created by Pouek_#5280')
+message.channel.send(helpambed);
+}
+else{
+  message.reply("You can't use that!")
+}
 if (message.content.startsWith(`sh play`) && !musicon) {
   message.channel.send("Music is not available now :( Try again later")
       }
@@ -310,7 +327,7 @@ if(message.content == "sh bot"){
         { name: 'Ping',value: Math.round(client.ws.ping) + ' ms'},
         {name: 'Uptime',value:seconds+' seconds'},
         {name: 'Develop time version 1.0',value:'14 hours'},
-        {name: 'Bot version',value:'v1.4.5'},
+        {name: 'Bot version',value:'v1.4.9'},
     )
 	message.channel.send(botembed);
 };
@@ -321,18 +338,32 @@ if(message.content == "sh uptime"){
     .setDescription(seconds + ' seconds');
 	message.channel.send(uptimeembed);
 };
-if(message.content == "sh neko"){
-    fetch('https://weebs4life.ga/api/neko')
-    .then(res => res.json())
-    .then(json => {
-        let imageUrl = json.url
-    const nekoembed = new Discord.MessageEmbed()
+if(message.content.startsWith("sh eval")){
+  if(message.member.id == "504891362081112065"){
+  const args = message.content.split(" ").slice(2);
+  try {
+    const code = args.join(" ");
+    let evaled = eval(code);
+
+    if (typeof evaled !== "string")
+      evaled = require("util").inspect(evaled);
+
+      const evalem = new Discord.MessageEmbed()
     .setColor('#FFDF00')
-    .setTitle('Neko for you!')
-    .setDescription('Grabbed from weebs4life.ga api')
-    .setImage(imageUrl);
-    message.channel.send(nekoembed);
-    })
+    .setTitle('Eval results')
+    .setDescription((evaled), {code:"xl"})
+    message.channel.send(evalem);
+  } catch (err) {
+    const erroreval = new Discord.MessageEmbed()
+    .setColor('#FFDF00')
+    .setTitle('Eval error')
+    .setDescription(`\`ERROR\` \`\`\`xl\n${(err)}\n\`\`\``)
+    message.channel.send(erroreval);
+  }
+}
+else{
+  message.reply("You can't do that!")
+}
 }
 if(message.content.startsWith("sh hug")){
     let hug = message.content.split(' ').slice(2).join(' ');
@@ -496,6 +527,9 @@ if(message.content.startsWith("sh avatar")){
         message.channel.send(avatareeembed);
     }
 };
+if(message.content.startsWith("sh sike") && !message.author.bot){
+  message.reply("That's a wrong number");
+}
 if(message.content.startsWith("sh say") && !message.author.bot){
     let say = message.content.split(' ').slice(2).join(' ');
     if(say){
@@ -509,6 +543,91 @@ if(message.content.startsWith("sh say") && !message.author.bot){
         .setDescription("You didn't say anything!");
         message.channel.send(sayembed);
     }
+};
+if(message.content.startsWith("sh rps") && !message.author.bot){
+  var rpsfinal = rpsanswers[Math.floor(Math.random()*rpsanswers.length)];
+  let rps = message.content.split(' ').slice(2).join(' ');
+  if(rps){
+    if(rpsfinal == "🪨" && rps == "🪨"){
+      const endgame = new Discord.MessageEmbed()
+      .setColor('#C0C0C0')
+      .setAuthor('I choose ' + rpsfinal)
+      .setTitle('Tie')
+      .setDescription("Damn it how we ended in tie?");
+      message.channel.send(endgame);
+    }
+    else if(rpsfinal == "🪨" && rps == "🧻"){
+      const endgame = new Discord.MessageEmbed()
+      .setColor('#008000')
+      .setAuthor('I choose ' + rpsfinal)
+      .setTitle('You Win')
+      .setDescription("You must be cheating I never lose!");
+      message.channel.send(endgame);
+    }
+    else if(rpsfinal == "🪨" && rps == "✂️"){
+      const endgame = new Discord.MessageEmbed()
+      .setColor('#FF0000')
+      .setAuthor('I choose ' + rpsfinal)
+      .setTitle('Game Over')
+      .setDescription("HA! I won as always bots do");
+      message.channel.send(endgame);
+    }
+    else if(rpsfinal == "🧻" && rps == "✂️"){
+      const endgame = new Discord.MessageEmbed()
+      .setColor('#008000')
+      .setAuthor('I choose ' + rpsfinal)
+      .setTitle('You Win')
+      .setDescription("You must be cheating I never lose!");
+      message.channel.send(endgame);
+    }
+    else if(rpsfinal == "🧻" && rps == "🧻"){
+      const endgame = new Discord.MessageEmbed()
+      .setColor('#C0C0C0')
+      .setAuthor('I choose ' + rpsfinal)
+      .setTitle('Tie')
+      .setDescription("Damn it how we ended in tie?");
+      message.channel.send(endgame);
+    }
+    else if(rpsfinal == "🧻" && rps == "🪨"){
+      const endgame = new Discord.MessageEmbed()
+      .setColor('#FF0000')
+      .setAuthor('I choose ' + rpsfinal)
+      .setTitle('Game Over')
+      .setDescription("HA! I won as always bots do");
+      message.channel.send(endgame);
+    }
+    else if(rpsfinal == "✂️" && rps == "🪨"){
+      const endgame = new Discord.MessageEmbed()
+      .setColor('#008000')
+      .setAuthor('I choose ' + rpsfinal)
+      .setTitle('You Win')
+      .setDescription("You must be cheating I never lose!");
+      message.channel.send(endgame);
+    }
+    else if(rpsfinal == "✂️" && rps == "🧻"){
+      const endgame = new Discord.MessageEmbed()
+      .setColor('#FF0000')
+      .setAuthor('I choose ' + rpsfinal)
+      .setTitle('Game Over')
+      .setDescription("HA! I won as always bots do");
+      message.channel.send(endgame);
+    }
+    else if(rpsfinal == "✂️" && rps == "✂️"){
+      const endgame = new Discord.MessageEmbed()
+      .setColor('#C0C0C0')
+      .setAuthor('I choose ' + rpsfinal)
+      .setTitle('Tie')
+      .setDescription("Damn it how we ended in tie?");
+      message.channel.send(endgame);
+    }
+  }
+  else{
+      const sayembed = new Discord.MessageEmbed()
+      .setColor('#FFDF00')
+      .setTitle('Error')
+      .setDescription("You didn't send any 🪨 or 🧻 or ✂️");
+      message.channel.send(sayembed);
+  }
 };
 if(message.content == "sh invite"){
     const linkembed = new Discord.MessageEmbed()
